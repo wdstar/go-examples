@@ -2,6 +2,8 @@ package animal
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 // test helpers for each test case.
@@ -13,9 +15,10 @@ func TestCatString(t *testing.T) {
 	c := createCat()
 	expected := "This is a cat (Mike)."
 	actual := c.String()
-	if actual != expected {
-		t.Errorf("got: %v\nwant: %v", actual, expected)
-	}
+	assert.Equal(t, expected, actual)
+	//if actual != expected {
+	//	t.Errorf("got: %v\nwant: %v", actual, expected)
+	//}
 }
 
 func TestCatCry(t *testing.T) {
@@ -25,7 +28,8 @@ func TestCatCry(t *testing.T) {
 	expected := "mew\n"
 	a.Cry()
 	actual := testBuf.String()
-	if actual != expected {
-		t.Errorf("got: %v\nwant: %v", actual, expected)
-	}
+	assert.Equal(t, expected, actual)
+	//if actual != expected {
+	//	t.Errorf("got: %v\nwant: %v", actual, expected)
+	//}
 }

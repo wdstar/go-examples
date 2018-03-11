@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var testBuf *bytes.Buffer
@@ -42,19 +44,22 @@ func TestAnimalString(t *testing.T) {
 	a := createAnimal()
 	expected := "This is an animal (No name)."
 	actual := a.String()
-	if actual != expected {
-		t.Errorf("got: %v\nwant: %v", actual, expected)
-	}
+	assert.Equal(t, expected, actual)
+	//if actual != expected {
+	//	t.Errorf("got: %v\nwant: %v", actual, expected)
+	//}
 }
 
 func TestAnimalCry(t *testing.T) {
+	assert := assert.New(t)
 	setUp()
 
 	a := createAnimal()
 	expected := "cry\n"
 	a.Cry()
 	actual := testBuf.String()
-	if actual != expected {
-		t.Errorf("got: %v\nwant: %v", actual, expected)
-	}
+	assert.Equal(expected, actual)
+	//if actual != expected {
+	//	t.Errorf("got: %v\nwant: %v", actual, expected)
+	//}
 }
