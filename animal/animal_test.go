@@ -40,7 +40,7 @@ func createAnimal() Animal {
 
 func TestAnimalString(t *testing.T) {
 	a := createAnimal()
-	expected := "This is a animal (No name)."
+	expected := "This is an animal (No name)."
 	actual := a.String()
 	if actual != expected {
 		t.Errorf("got: %v\nwant: %v", actual, expected)

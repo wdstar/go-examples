@@ -36,7 +36,7 @@ func NewAnimal(name string) Animal {
 }
 
 func (a *animal) String() string {
-	return fmt.Sprintf("This is a animal (%s).", a.name)
+	return fmt.Sprintf("This is an animal (%s).", a.name)
 }
 
 func (a *animal) Cry() {
