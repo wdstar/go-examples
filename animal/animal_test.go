@@ -15,32 +15,46 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	// setup
+	// before all
 	testBuf = &bytes.Buffer{}
 	writer = testBuf
+
 	code := m.Run()
-	// teardown
+
+	// after all
 	writer = os.Stdout
 	os.Exit(code)
 }
 
+// test helpers for each test case.
+func setUp() {
+	testBuf.Reset()
+}
+
+func tearDown() {
+}
+
+func createAnimal() Animal {
+	return NewAnimal("No name")
+}
+
 func TestAnimalString(t *testing.T) {
-	a := NewAnimal("No name")
+	a := createAnimal()
 	expected := "This is a animal (No name)."
 	actual := a.String()
 	if actual != expected {
-		t.Errorf("got %v\nwant %v", actual, expected)
+		t.Errorf("got: %v\nwant: %v", actual, expected)
 	}
 }
 
 func TestAnimalCry(t *testing.T) {
-	testBuf.Reset()
+	setUp()
 
-	a := NewAnimal("No name")
+	a := createAnimal()
 	expected := "cry\n"
 	a.Cry()
 	actual := testBuf.String()
 	if actual != expected {
-		t.Errorf("got %v\nwant %v", actual, expected)
+		t.Errorf("got: %v\nwant: %v", actual, expected)
 	}
 }
