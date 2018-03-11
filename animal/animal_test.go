@@ -9,7 +9,7 @@ import (
 var testBuf *bytes.Buffer
 
 func init() {
-	// These initializaitons is moved to TestMain()
+	// These initializations are moved to TestMain()
 	//testBuf = &bytes.Buffer{}
 	//writer = testBuf
 }
