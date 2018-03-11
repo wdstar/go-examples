@@ -1,0 +1,4 @@
+package: github.com/wdstar/go-examples
+import: []
+testImport:
+- package: github.com/stretchr/testify
