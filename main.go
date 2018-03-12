@@ -12,12 +12,18 @@ func main() {
 	a := animal.NewAnimal("No name")
 	fmt.Println(a)
 	a.Cry()
-
-	d := animal.NewDog("Hachi")
-	fmt.Println(d)
-	d.Cry()
+	a.DelegateCry()
+	a.CallCry(a)
 
 	c := animal.NewCat("Mike")
 	fmt.Println(c)
 	c.Cry()
+	c.DelegateCry()
+	c.CallCry(c)
+
+	d := animal.NewDog("Hachi")
+	fmt.Println(d)
+	d.Cry()
+	d.DelegateCry()
+	d.CallCry(d)
 }

@@ -17,6 +17,8 @@ func init() {
 type Animal interface {
 	String() string
 	Cry()
+	DelegateCry()
+	CallCry(a Animal)
 }
 
 type animal struct {
@@ -41,4 +43,12 @@ func (a *animal) String() string {
 
 func (a *animal) Cry() {
 	fmt.Fprintln(writer, "cry")
+}
+
+func (a *animal) DelegateCry() {
+	a.Cry()
+}
+
+func (a *animal) CallCry(aa Animal) {
+	aa.Cry()
 }
