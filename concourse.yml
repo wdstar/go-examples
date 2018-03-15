@@ -1,0 +1,64 @@
+---
+# Concourse pipeline: go-examples
+#   $ fly -t target sp -p go-examples -c concourse.yml -l fly-vars.yml -l ~/sec/credentials-prod.yml
+resources:
+- name: src
+  type: git
+  source:
+    uri: https://github.com/wdstar/go-examples
+    branch: master
+- name: build-image
+  type: docker-image
+  source:
+    repository: golang
+    tag: ((golang-version))
+    registry_mirror: https://((registry-mirror-domain))
+      # e.g. https://registry.docker.example.com:5000
+    ca_certs:
+    - domain: ((registry-mirror-domain))
+      # e.g. registry.docker.example.com:5000
+      cert: ((docker-reg-ca-cert))
+  check_every: 1h
+
+jobs:
+- name: test
+  plan:
+  - aggregate:
+    - get: src
+      params:
+        depth: 5
+      trigger: false
+    - get: build-image
+  - task: test
+    image: build-image
+    config:
+      platform: linux
+      inputs:
+      - name: src
+      run:
+        path: sh
+        args:
+        - -c
+        - |
+          env
+          echo ''
+          echo 'Installing tools ...'
+          go get -v -u github.com/golang/dep/cmd/dep
+          go get -v -u golang.org/x/lint/golint
+          export SRC_ROOT=${GOPATH}/src/github.com/wdstar/go-examples
+          mkdir -p $SRC_ROOT
+          cp -r ./src/* $SRC_ROOT
+          cd $SRC_ROOT
+          echo ''
+          echo 'dep ensure ...'
+          dep ensure -v
+          echo ''
+          echo 'go vet ...'
+          go vet -v ./...
+          echo ''
+          echo 'golint ...'
+          #golint -set_exit_status ./...
+          golint ./...
+          echo ''
+          echo 'go test ...'
+          go test -v -cover ./...
