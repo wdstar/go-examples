@@ -27,7 +27,7 @@ jobs:
     - get: src
       params:
         depth: 5
-      trigger: false
+      trigger: true
     - get: build-image
   - task: test
     image: build-image
