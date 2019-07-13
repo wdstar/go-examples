@@ -9,6 +9,13 @@ builds:
 - env:
   - GO111MODULE=on
   - CGO_ENABLED=0
+  goos:
+  - windows
+  - darwin
+  - linux
+  goarch:
+  - amd64
+  #- 386
 archives:
 - replacements:
     darwin: Darwin
