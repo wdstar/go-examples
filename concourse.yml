@@ -43,15 +43,14 @@ jobs:
           env
           echo ''
           echo 'Installing tools ...'
-          go get -v -u github.com/golang/dep/cmd/dep
           go get -v -u golang.org/x/lint/golint
           export SRC_ROOT=${GOPATH}/src/github.com/wdstar/go-examples
           mkdir -p $SRC_ROOT
           cp -r ./src/* $SRC_ROOT
           cd $SRC_ROOT
           echo ''
-          echo 'dep ensure ...'
-          dep ensure -v
+          echo 'go mod download ...'
+          go mod download
           echo ''
           echo 'go vet ...'
           go vet -v ./...

@@ -1,3 +1,3 @@
 ---
 package-name: go-examples
-golang-version: 1.9.4
+golang-version: 1.12.7
