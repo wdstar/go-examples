@@ -41,10 +41,12 @@ func createAnimal() Animal {
 }
 
 func TestAnimalString(t *testing.T) {
+	assert := assert.New(t)
+
 	a := createAnimal()
 	expected := "This is an animal (No name)."
 	actual := a.String()
-	assert.Equal(t, expected, actual)
+	assert.Equal(expected, actual)
 	//if actual != expected {
 	//	t.Errorf("got: %v\nwant: %v", actual, expected)
 	//}
