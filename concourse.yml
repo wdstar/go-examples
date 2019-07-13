@@ -35,6 +35,8 @@ jobs:
       platform: linux
       inputs:
       - name: src
+      params:
+        GO111MODULE: "on"
       run:
         path: sh
         args:
