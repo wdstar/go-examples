@@ -1,9 +1,15 @@
 # go-examples
 
+This source's dependency is managed by Go module.
+
+## requirements
+
+- Go >= 1.11
+
 ## Test
 
 ```
-$ go get -v -u github.com/golang/dep/cmd/dep
-$ dep ensure -v
+$ export GO111MODULE=on
+$ go mod download
 $ go test -cover ./...
 ```
