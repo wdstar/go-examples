@@ -37,6 +37,8 @@ jobs:
       - name: src
       params:
         GO111MODULE: "on"
+        # for goreleaser
+        #GITHUB_TOKEN: ((github-token))
       run:
         path: sh
         args:
@@ -62,3 +64,4 @@ jobs:
           echo ''
           echo 'go test ...'
           go test -v -cover ./...
+          #curl -sL https://git.io/goreleaser | bash
