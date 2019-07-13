@@ -5,6 +5,7 @@
 *.so
 *.dylib
 *.swp
+dist
 go-examples
 
 # Test binary, build with `go test -c`
