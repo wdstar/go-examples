@@ -6,7 +6,14 @@ import (
 	"github.com/wdstar/go-examples/animal"
 )
 
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 func main() {
+	fmt.Printf("go-examples ver.: %v, commit %v, built at %v\n", version, commit, date)
 	fmt.Println("Hello World!")
 
 	a := animal.NewAnimal("No name")
