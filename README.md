@@ -1,5 +1,7 @@
 # go-examples
 
+This source's dependency is managed by dep. 
+
 ## Test
 
 ```
