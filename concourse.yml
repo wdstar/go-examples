@@ -5,17 +5,23 @@ resources:
 - name: src
   type: git
   source:
-    uri: git@github.com:wdstar/go-examples.git
+    uri: ((git-uri))
     branch: master
     private_key: ((git-private-key))
+    git_config:
+    - name: user.name
+      value: ((git-id))
+    - name: user.email
+      value: ((git-user))
 - name: version
   type: semver
   source:
-    uri: git@github.com:wdstar/go-examples.git
-    branch: version
-    private_key: ((git-private-key))
-    file: version
     driver: git
+    uri: ((git-uri))
+    branch: version
+    file: version
+    private_key: ((git-private-key))
+    git_user: ((git-user))
 - name: build-image
   type: docker-image
   source:
