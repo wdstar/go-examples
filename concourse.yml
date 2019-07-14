@@ -5,8 +5,17 @@ resources:
 - name: src
   type: git
   source:
-    uri: https://github.com/wdstar/go-examples
+    uri: git@github.com:wdstar/go-examples.git
     branch: master
+    private_key: ((git-private-key))
+- name: version
+  type: semver
+  source:
+    uri: git@github.com:wdstar/go-examples.git
+    branch: version
+    private_key: ((git-private-key))
+    file: version
+    driver: git
 - name: build-image
   type: docker-image
   source:
@@ -72,7 +81,19 @@ jobs:
         depth: 5
       passed: [test]
       trigger: true
+    # bumping with an atomic put
+    - put: version
+      params:
+        bump: patch
     - get: build-image
+  # push tag
+  - put: src
+    params:
+      repository: src
+      tag_prefix: v
+      tag: version/version
+      only_tag: true
+      annotate: version/version
   - task: publish
     image: build-image
     config:
@@ -93,5 +114,6 @@ jobs:
           echo 'goreleaser:'
           goreleaser -v
           cd ./src
+          # Test: goreleaser read the latest tag from github.
           goreleaser --snapshot --skip-publish --rm-dist
           ./dist/go-examples_linux_amd64/go-examples
