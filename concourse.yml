@@ -1,6 +1,6 @@
 ---
 # Concourse pipeline: go-examples
-#   $ fly -t target sp -p go-examples -c concourse.yml -l fly-vars.yml -l ~/sec/credentials-prod.yml
+#   $ fly -t $CC_TARGET sp -p go-examples -c concourse.yml -l fly-vars.yml -l ~/sec/credentials-prod.yml
 resources:
 - name: src
   type: git
@@ -37,8 +37,6 @@ jobs:
       - name: src
       params:
         GO111MODULE: "on"
-        # for goreleaser
-        #GITHUB_TOKEN: ((github-token))
       run:
         path: sh
         args:
@@ -48,10 +46,12 @@ jobs:
           echo ''
           echo 'Installing tools ...'
           go get -v -u golang.org/x/lint/golint
-          export SRC_ROOT=${GOPATH}/src/github.com/wdstar/go-examples
-          mkdir -p $SRC_ROOT
-          cp -r ./src/* $SRC_ROOT
-          cd $SRC_ROOT
+          # for non go module
+          #export SRC_ROOT=${GOPATH}/src/github.com/wdstar/go-examples
+          #mkdir -p $SRC_ROOT
+          #cp -r ./src/* $SRC_ROOT
+          #cd $SRC_ROOT
+          cd ./src
           echo ''
           echo 'go mod download ...'
           go mod download
@@ -64,4 +64,34 @@ jobs:
           echo ''
           echo 'go test ...'
           go test -v -cover ./...
-          #curl -sL https://git.io/goreleaser | bash
+- name: publish
+  plan:
+  - aggregate:
+    - get: src
+      params:
+        depth: 5
+      passed: [test]
+      trigger: true
+    - get: build-image
+  - task: publish
+    image: build-image
+    config:
+      platform: linux
+      inputs:
+      - name: src
+      params:
+        GO111MODULE: "on"
+        # for goreleaser
+        GITHUB_TOKEN: ((github-token))
+      run:
+        path: sh
+        args:
+        - -c
+        - |
+          curl -sL -o /usr/local/bin/goreleaser https://git.io/goreleaser
+          chmod 755 /usr/local/bin/goreleaser
+          echo 'goreleaser:'
+          goreleaser -v
+          cd ./src
+          goreleaser --snapshot --skip-publish --rm-dist
+          ./dist/go-examples_linux_amd64/go-examples
