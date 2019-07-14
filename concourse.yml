@@ -81,12 +81,12 @@ jobs:
         depth: 5
       passed: [test]
       trigger: true
-    # bumping with an atomic put
+    # bumping version with an atomic put
     - put: version
       params:
         bump: patch
     - get: build-image
-  # push tag
+  # push the latest tag
   - put: src
     params:
       repository: src
@@ -114,6 +114,9 @@ jobs:
           echo 'goreleaser:'
           goreleaser -v
           cd ./src
-          # Test: goreleaser read the latest tag from github.
+          # goreleaser reads the latest tag from the github repository.
+          # Test
           goreleaser --snapshot --skip-publish --rm-dist
+          # Prod
+          #goreleaser
           ./dist/go-examples_linux_amd64/go-examples
