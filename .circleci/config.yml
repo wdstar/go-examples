@@ -1,9 +1,4 @@
 version: 2
-filters:
-  branches:
-    only:
-      - master
-
 jobs:
   test:
     docker:
@@ -18,3 +13,7 @@ workflows:
   build-workflow:
     jobs:
       - test
+        filters:
+          branches:
+            only:
+              - master
