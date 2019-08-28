@@ -1,4 +1,9 @@
 version: 2
+filters:
+  branches:
+    only:
+      - master
+
 jobs:
   test:
     docker:
