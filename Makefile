@@ -24,6 +24,11 @@ lint:
 .PHONY: test
 test: format lint
 	mkdir -p reports
+	go test -v -cover -coverprofile=reports/coverage.out ./...
+
+.PHONY: test-repo
+test-repo: format lint
+	mkdir -p reports
 	go test -v -cover -coverprofile=reports/coverage.out -json ./... > reports/test.json
 
 .PHONY: build
