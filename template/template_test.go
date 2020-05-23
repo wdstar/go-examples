@@ -10,22 +10,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func init() {
-}
-
 func TestMain(m *testing.M) {
 	// before all
 	code := m.Run()
 
 	// after all
 	os.Exit(code)
-}
-
-// test helpers for each test case.
-func setUp() {
-}
-
-func tearDown() {
 }
 
 type Album struct {
@@ -37,6 +27,20 @@ type Album struct {
 func TestTemplate(t *testing.T) {
 	assert := assert.New(t)
 
+	cases := []struct {
+		tpl *template.Template
+	}{
+		// 1. Calling function variables version
+		{tpl: template.Must(
+			template.New("test").
+				Parse(`Title: {{.Title}}, labels: {{(call .Join .Labels ",")}}`))},
+		// 2. Creating custom functions for template version
+		{tpl: template.Must(
+			template.New("test").Funcs(template.FuncMap{
+				"join": strings.Join,
+			}).Parse(`Title: {{.Title}}, labels: {{join .Labels ","}}`))},
+	}
+
 	album := Album{
 		Title:  "Mozart: Requiem K. 626",
 		Labels: []string{"Classical", "SACD"},
@@ -45,31 +49,13 @@ func TestTemplate(t *testing.T) {
 
 	expected := "Title: Mozart: Requiem K. 626, labels: Classical,SACD"
 
-	// 1. Calling function variables version
-	tpl, err := template.New("test").
-		Parse(`Title: {{.Title}}, labels: {{(call .Join .Labels ",")}}`)
-	if err != nil {
-		panic(err)
+	for _, c := range cases {
+		var output bytes.Buffer
+		err := c.tpl.Execute(&output, album)
+		// err := c.tpl.Execute(os.Stdout, album)
+		if err != nil {
+			panic(err)
+		}
+		assert.Equal(expected, output.String())
 	}
-	var output bytes.Buffer
-	err = tpl.Execute(&output, album)
-	// err = tpl.Execute(os.Stdout, album)
-	if err != nil {
-		panic(err)
-	}
-	assert.Equal(expected, output.String())
-
-	// 2. Creating custom functions for template version
-	tpl, err = template.New("test").Funcs(template.FuncMap{
-		"join": strings.Join,
-	}).Parse(`Title: {{.Title}}, labels: {{join .Labels ","}}`)
-	if err != nil {
-		panic(err)
-	}
-	output = bytes.Buffer{}
-	err = tpl.Execute(&output, album)
-	if err != nil {
-		panic(err)
-	}
-	assert.Equal(expected, output.String())
 }
