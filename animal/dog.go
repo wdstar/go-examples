@@ -7,6 +7,9 @@ type Dog struct {
 	*animal
 }
 
+// implementation check
+var _ Animal = (*Dog)(nil)
+
 // NewDog creates a dog.
 func NewDog(name string) *Dog {
 	return &Dog{

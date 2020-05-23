@@ -25,6 +25,9 @@ type animal struct {
 	name string
 }
 
+// implementation check
+var _ Animal = (*animal)(nil)
+
 // NewAnimal creates an animal.
 func NewAnimal(name string) Animal {
 	return &animal{

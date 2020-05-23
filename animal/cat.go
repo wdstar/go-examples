@@ -8,6 +8,9 @@ type Cat struct {
 	age int
 }
 
+// implementation check
+var _ Animal = (*Cat)(nil)
+
 // NewCat creates a Cat struct.
 func NewCat(name string) *Cat {
 	// init with tags
