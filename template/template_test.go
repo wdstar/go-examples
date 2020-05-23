@@ -24,21 +24,26 @@ type Album struct {
 	Join   func(strs []string, sep string) string
 }
 
+var (
+	// 1. Calling function variables version
+	tplWithFuncVars *template.Template = template.Must(
+		template.New("test").
+			Parse(`Title: {{.Title}}, labels: {{(call .Join .Labels ",")}}`))
+	// 2. Creating custom functions for template version
+	tplWithFuncs *template.Template = template.Must(
+		template.New("test").Funcs(template.FuncMap{
+			"join": strings.Join,
+		}).Parse(`Title: {{.Title}}, labels: {{join .Labels ","}}`))
+)
+
 func TestTemplate(t *testing.T) {
 	assert := assert.New(t)
 
 	cases := []struct {
 		tpl *template.Template
 	}{
-		// 1. Calling function variables version
-		{tpl: template.Must(
-			template.New("test").
-				Parse(`Title: {{.Title}}, labels: {{(call .Join .Labels ",")}}`))},
-		// 2. Creating custom functions for template version
-		{tpl: template.Must(
-			template.New("test").Funcs(template.FuncMap{
-				"join": strings.Join,
-			}).Parse(`Title: {{.Title}}, labels: {{join .Labels ","}}`))},
+		{tpl: tplWithFuncVars},
+		{tpl: tplWithFuncs},
 	}
 
 	album := Album{
