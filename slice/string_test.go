@@ -14,10 +14,18 @@ func TestCleanBytes(t *testing.T) {
 		expected string
 	}{
 		{"abc", "abc"},
+		// invalid utf-8
 		{
-			// invalid utf-8
 			"abc\x80", // []byte{0x61, 0x62, 0x63, 0x80}
 			"abc�",    // []byte{0x61, 0x62, 0x63, 0xef, 0xbf, 0xbd}
+		},
+		{
+			"\x80abc",
+			"�abc",
+		},
+		{
+			"ab\x80c",
+			"ab�c",
 		},
 	}
 
