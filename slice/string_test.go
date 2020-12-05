@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCleanBytes(t *testing.T) {
+func TestSanitizeInvalidUTF8(t *testing.T) {
 	assert := assert.New(t)
 
 	cases := []struct {
@@ -30,6 +30,11 @@ func TestCleanBytes(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		assert.Equal(c.expected, string(cleanBytes([]byte(c.target))))
+		if c.target != c.expected {
+			// []byte() and string() retain invalid utf-8.
+			assert.NotEqual(c.expected, string([]byte(c.target)))
+		}
+		assert.Equal(c.expected, string(sanitizeInvalidUTF8([]byte(c.target))))
+		assert.Equal(c.expected, string(sanitizeInvalidUTF8viaRune([]byte(c.target))))
 	}
 }
