@@ -6,7 +6,7 @@ This source's dependency is managed by Go module.
 
 ## requirements
 
-- Go >= 1.11
+- Go >= 1.14
 
 ## Test
 
